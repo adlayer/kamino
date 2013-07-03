@@ -32,14 +32,17 @@ kamino --prod clone hosts
 
 Kamino will know exactly where to place your config file.
 
-## Dependencies
 
-### Ubuntu
+## Install
+
+### Dependencies
+
+#### Ubuntu
 ```bash
 apt-get install s3cmd
 ```
 
-## OSX
+#### OSX
 ```bash
 git clone https://github.com/s3tools/s3cmd.git
 cd s3cmd
@@ -47,15 +50,15 @@ sudo python setup.py install
 cd ..
 ```
 
-## Configuration
+#### Configuration
 ```
 s3cmd --configure
 ```
 
-## Install
 ```bash
 git clone https://github.com/adlayer/kamino.git
 cd kamino
 make install
 ```
+
 During the kamino install process you will be asked about the name of the bucket in your S3 account
