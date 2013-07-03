@@ -1,0 +1,40 @@
+#!/bin/sh
+command=$1
+value=$2
+
+bucket=$(cat ~/.kamino/bucket.config)
+process_dir=$(pwd)
+
+
+function upload(){
+	## Files properties
+	filename=$(basename $value)
+	destination="path: "$(dirname $value)
+	
+	#######################################
+	# Copy to /tmp
+	cp -r $value /tmp/${filename}
+	echo "$value" > /tmp/path.config
+	#######################################	
+	cd /tmp
+	tar -cvwf ${filename}.tar ${filename} path.config
+	cd $process_dir
+	######################################
+	s3cmd put /tmp/${filename}.tar s3://${bucket}
+	s3cmd list s3://${bucket}
+	
+	# remove from tpm
+	rm -rf /tmp/${filename}
+	rm -rf /tmp/${filename}.tar
+}
+
+function clone(){
+	s3cmd get s3://${bucket}/${value}.tar ${value}.tar
+	tar xzvf ${value}.tar
+	rm -rf ${value}.tar
+}
+
+function main(){
+	$command $value
+}
+main
