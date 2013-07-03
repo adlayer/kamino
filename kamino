@@ -1,14 +1,19 @@
 #!/bin/sh
-command=$1
-value=$2
+env=$1
+command=$2
+value=$3
 
 bucket=$(cat ~/.kamino/bucket.config)
 process_dir=$(pwd)
+filename=$(basename $value)
 
+# Usage
+## Kamino [env] command value
+## kamino --dev upload /etc/hosts
+## kamino --prod clone hosts
 
 function upload(){
 	## Files properties
-	filename=$(basename $value)
 	destination="path: "$(dirname $value)
 	
 	#######################################
@@ -20,7 +25,7 @@ function upload(){
 	tar -cvwf ${filename}.tar ${filename} path.config
 	cd $process_dir
 	######################################
-	s3cmd put /tmp/${filename}.tar s3://${bucket}
+	s3cmd put /tmp/${filename}.tar s3://${bucket}/${env}/${filename}.tar
 	s3cmd list s3://${bucket}
 	
 	# Remove from tpm
@@ -30,7 +35,7 @@ function upload(){
 
 function clone(){
 	# Downloading config tar
-	s3cmd get s3://${bucket}/${value}.tar ${value}.tar
+	s3cmd get s3://${bucket}/${env}/${filename}.tar ${filename}.tar
 	# Extract config tar
 	tar xzvf ${value}.tar
 	# Remove tar
