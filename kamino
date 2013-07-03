@@ -23,15 +23,25 @@ function upload(){
 	s3cmd put /tmp/${filename}.tar s3://${bucket}
 	s3cmd list s3://${bucket}
 	
-	# remove from tpm
+	# Remove from tpm
 	rm -rf /tmp/${filename}
 	rm -rf /tmp/${filename}.tar
 }
 
 function clone(){
+	# Downloading config tar
 	s3cmd get s3://${bucket}/${value}.tar ${value}.tar
+	# Extract config tar
 	tar xzvf ${value}.tar
+	# Remove tar
 	rm -rf ${value}.tar
+	# Destination path
+	path=$(cat path.config)
+	# Replace current config
+	mv -i $value $path
+	# Clear downloaded files
+	rm -rf path.config
+	rm -rf $value
 }
 
 function main(){
