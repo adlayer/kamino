@@ -6,7 +6,7 @@ Kamino is a tool to help you backup or synchronize your configuration files, it 
 With Kamino all your team can easily share the same dotfiles, vhosts, and database configuration files.
 It's written in shell script, so it runs anywhere.
 
-> if you hate run the same configuration on multiple machines, Kamino is the right tool for you.
+> If you hate run the same configuration on multiple machines, Kamino is the right tool for you.
 
 ### Storage
 All config files are stored in an Amazon S3 Bucket, so we encourage you to create an account there and reserve an exclusive bucket for Kamino.
