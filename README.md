@@ -26,7 +26,9 @@ kamino --dev clone hosts
 ```
 
 #### Configuring a previouly uploaded config in a production environment 
+```bash
 kamino --prod clone hosts
+```
 
 Kamino will know exactly where to place your config file.
 
