@@ -37,7 +37,7 @@ function clone(){
 	# Downloading config tar
 	s3cmd get s3://${bucket}/${env}/${filename}.tar ${filename}.tar
 	# Extract config tar
-	tar xzvf ${value}.tar
+	tar -xvf ${value}.tar
 	# Remove tar
 	rm -rf ${value}.tar
 	# Destination path
