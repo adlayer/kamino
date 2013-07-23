@@ -5,7 +5,10 @@ value=$3
 
 bucket=$(cat ~/.kamino/bucket.config)
 process_dir=$(pwd)
-filename=$(basename $value)
+
+if [ $value ]; then
+	filename=$(basename $value)
+fi
 
 # Usage
 ## Kamino [env] command value
