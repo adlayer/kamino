@@ -8,6 +8,9 @@ install:
 uninstall:
 	rm -rf /usr/local/bin/kamino
 	rm -rf ~/.kamino
+update:
+	rm -rf /usr/local/bin/kamino
+	cp kamino /usr/local/bin
 default:
 	make install
 
