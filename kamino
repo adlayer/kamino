@@ -8,6 +8,9 @@ process_dir=$(pwd)
 
 if [ $value ]; then
 	filename=$(basename $value)
+else
+	command=$1
+	value=$2
 fi
 
 # Usage
@@ -52,7 +55,33 @@ function clone(){
 	rm -rf $value
 }
 
+function setup(){
+	root=$(pwd)
+	dna=$1
+	echo "Looking for DNA $dna"
+	path=${root}/${dna}
+	if [ -f $path ]; then
+		echo "$dna DNA founded"
+		echo "Installing $dna DNA"
+		sh $path
+	else
+		echo "$dna DNA not found"
+	fi
+}
+
+function depends(){
+	root=$(pwd)
+	dependency=$1
+	if [ -z $(which $dependency) ]; then
+		echo "Dependency $dependency not installed"
+		setup $dependency
+	else
+		echo "Dependency $dependency is already installed"
+	fi
+}
+
 function main(){
 	$command $value
 }
+
 main
