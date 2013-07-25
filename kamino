@@ -63,7 +63,7 @@ function setup(){
 	if [ -f $path ]; then
 		echo "$dna DNA founded"
 		echo "Installing $dna DNA"
-		sh $path
+		bash $path
 	else
 		echo "$dna DNA not found"
 	fi

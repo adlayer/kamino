@@ -12,7 +12,7 @@ It's written in shell script, so it runs anywhere.
 All config files are stored in an Amazon S3 Bucket, so we encourage you to create an account there and reserve an exclusive bucket for Kamino.
 
 ### Usage
-kamino [env] [command] [value]
+kamino [flag] [command] [value]
 
 #### Add a config file to the storage
 ```bash
