@@ -59,7 +59,7 @@ function setup(){
 	root=$(pwd)
 	dna=$1
 	echo "Looking for DNA $dna"
-	path=${root}/${dna}
+	path=${root}/${dna}/install
 	if [ -f $path ]; then
 		echo "$dna DNA founded"
 		echo "Installing $dna DNA"
