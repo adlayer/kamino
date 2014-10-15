@@ -1,0 +1,53 @@
+#!/bin/bash
+env=$1
+command=$2
+value=$3
+source ~/.kamino/servers
+
+function render(){
+	name=$1
+	source ${name}.kconf
+	template=$(cat ${name}.tpl)
+ 	eval echo $template	| cat > $name
+}
+
+function setup(){
+	root=$(pwd)
+	dna=$1
+	echo "Looking for DNA $dna"
+	path=~/.kamino/dnas/${dna}/install
+	if [ -f $path ]; then
+		echo "$dna DNA founded"
+		echo "Installing $dna DNA"
+		bash $path
+	else
+		echo "$dna DNA not found"
+	fi
+}
+
+function depends(){
+	root=$(pwd)
+	dependency=$1
+	if [ -z $(which $dependency) ]; then
+		echo "Dependency $dependency not installed"
+		setup $dependency
+	else
+		echo "Dependency $dependency is already installed"
+	fi
+}
+
+function remote(){
+	path=$(which kamino)
+	server=$(eval "echo \$$env")
+	ssh $server "bash -s" < $path $command $value
+}
+
+function main(){
+	if [ $value ]; then
+		remote
+	else
+		$env $command
+	fi
+}
+
+main

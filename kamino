@@ -1,87 +1,32 @@
 #!/bin/bash
-env=$1
-command=$2
-value=$3
 
-bucket=$(cat ~/.kamino/bucket.config)
-process_dir=$(pwd)
+# To check the number of arguments use: $#
 
-if [ $value ]; then
-	filename=$(basename $value)
-else
-	command=$1
-	value=$2
-fi
-
-# Usage
-## Kamino [env] command value
-## kamino --dev upload /etc/hosts
-## kamino --prod clone hosts
-
-function upload(){
-	## Files properties
-	destination="path: "$(dirname $value)
-	
-	#######################################
-	# Copy to /tmp
-	cp -r $value /tmp/${filename}
-	echo "$value" > /tmp/path.config
-	#######################################	
-	cd /tmp
-	tar -cvwf ${filename}.tar ${filename} path.config
-	cd $process_dir
-	######################################
-	s3cmd put /tmp/${filename}.tar s3://${bucket}/${env}/${filename}.tar
-	s3cmd list s3://${bucket}
-	
-	# Remove from tpm
-	rm -rf /tmp/${filename}
-	rm -rf /tmp/${filename}.tar
+function status_code(){
+	url=$1
+	curl -sL -w "%{http_code}" $url -o /dev/null
 }
 
-function clone(){
-	# Downloading config tar
-	s3cmd get s3://${bucket}/${env}/${filename}.tar ${filename}.tar
-	# Extract config tar
-	tar -xvf ${value}.tar
-	# Remove tar
-	rm -rf ${value}.tar
-	# Destination path
-	path=$(cat path.config)
-	# Replace current config
-	mv -i $value $path
-	# Clear downloaded files
-	rm -rf path.config
-	rm -rf $value
-}
+# is_up $url
+# Check if the http response status code is different from 000, 404 and 403
+function is_up(){
+	url=$1
+	result=$(status_code $url)
 
-function setup(){
-	root=$(pwd)
-	dna=$1
-	echo "Looking for DNA $dna"
-	path=${root}/${dna}/install
-	if [ -f $path ]; then
-		echo "$dna DNA founded"
-		echo "Installing $dna DNA"
-		bash $path
+	if [ $result -ne 000 ] && [ $result -ne 404 ] && [ $result -ne 403 ]; then
+		echo true
 	else
-		echo "$dna DNA not found"
+		echo false
 	fi
 }
 
-function depends(){
-	root=$(pwd)
-	dependency=$1
-	if [ -z $(which $dependency) ]; then
-		echo "Dependency $dependency not installed"
-		setup $dependency
+# Check if a file or global command is found
+function exists(){
+	path=$1
+	if [ -f $path ] || [ $(which $path) ]; then
+		echo true
 	else
-		echo "Dependency $dependency is already installed"
+		echo false
 	fi
 }
 
-function main(){
-	$command $value
-}
-
-main

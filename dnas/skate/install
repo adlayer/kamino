@@ -1,0 +1,4 @@
+#!/bin/bash
+source /usr/local/bin/kamino
+
+render $(dirname $0)/config/wheel
