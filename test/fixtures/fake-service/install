@@ -1,0 +1,4 @@
+#!/bin/bash
+source /usr/local/bin/kamino
+echo "skate or die"
+echo haduken
