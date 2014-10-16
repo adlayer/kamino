@@ -31,11 +31,8 @@ function exists(){
 	fi
 }
 
-function install(){
-	dna=$1
-	dnas_dir=$2 || 'default dna'
-	path=${dnas_dir}/$dna/install
-	
+function exec_file(){
+	path=$1
 	if [ $(exists $path) ]; then
 		bash $path > /dev/null
 		if [ $? -eq 0 ]; then
@@ -46,5 +43,43 @@ function install(){
 	else
 		echo false
 	fi
+}
+
+function install(){
+	dna=$1
+	dnas_dir=$2 || 'default dna'
+	path=${dnas_dir}/$dna/install
 	
+	exec_file $path
+}
+
+function start(){
+	dna=$1
+	dnas_dir=$2 || 'default dna'
+	path=${dnas_dir}/$dna/start
+	
+	exec_file $path
+}
+
+function depends(){
+	dna=$1
+	dnas_dir=$2 || 'default dna'
+	path=${dnas_dir}/$dna/main.cfg
+
+	if [ $(exists $path) == true ]; then
+		source $path
+		if [ $(exists $installed == true) ]; then
+			## Already installed
+			echo true
+		else
+			## Not installed
+			if [ install $dna ]; then
+				echo true
+			else
+				echo false
+			fi
+		fi
+	else
+		echo false
+	fi
 }
